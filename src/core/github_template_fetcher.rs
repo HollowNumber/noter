@@ -2,6 +2,9 @@
 //!
 //! Handles downloading templates from multiple GitHub repositories with fallback support
 
+// TOOD: Rewrite this to also accept gitlab. and other hosting services.
+// Seems pretty big scope, so not sure how feasible this is.
+
 use crate::config::{Config, Metadata, ObsidianIntegrationConfig, TemplateRepository};
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};

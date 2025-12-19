@@ -29,7 +29,7 @@
 //! # Monitor system status
 //! noter status
 //! ```
-
+#[allow(clippy::multiple_crate_versions)]
 mod commands;
 mod config;
 mod core;

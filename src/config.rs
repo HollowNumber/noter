@@ -274,11 +274,10 @@ impl PathConfig {
             let path_str = absolute.to_string_lossy().to_string();
 
             // Remove any \\?\ prefix if it somehow got added
-            let clean_path = if let Some(stripped) = path_str.strip_prefix(r"\\?\") {
-                stripped.to_string()
-            } else {
-                path_str
-            };
+            let clean_path = path_str
+                .strip_prefix(r"\\?\")
+                .unwrap_or(&path_str)
+                .to_string();
 
             return Ok(clean_path.replace('/', "\\"));
         }

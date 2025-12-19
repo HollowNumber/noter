@@ -445,31 +445,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dtu-notes"
-version = "0.6.2"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "colored",
- "dirs",
- "fake",
- "flate2",
- "humansize",
- "opener",
- "rand",
- "regex",
- "semver",
- "serde",
- "serde_json",
- "tar",
- "tempfile",
- "toml",
- "ureq",
- "zip",
-]
-
-[[package]]
 name = "dummy"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -932,6 +907,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8911957c4b1549ac0dc74e30db9c8b0e66ddcd6d7acc33098f4c63a64a6d7ed"
 dependencies = [
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "noter"
+version = "0.6.2"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "colored",
+ "dirs",
+ "fake",
+ "flate2",
+ "humansize",
+ "opener",
+ "rand",
+ "regex",
+ "semver",
+ "serde",
+ "serde_json",
+ "tar",
+ "tempfile",
+ "toml",
+ "ureq",
+ "zip",
 ]
 
 [[package]]
