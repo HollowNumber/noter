@@ -18,8 +18,8 @@
 //! ### Basic Template Generation
 //!
 //! ```rust
-//! use dtu_notes::core::template_engine::{TemplateEngine, TemplateType};
-//! use dtu_notes::config::Config;
+//! use noter::core::template_engine::{TemplateEngine, TemplateType};
+//! use noter::config::Config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let config = Config::default();
@@ -40,7 +40,7 @@
 //! ### Configuration Management
 //!
 //! ```rust
-//! use dtu_notes::config::get_config;
+//! use noter::config::get_config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! // Load configuration
@@ -56,8 +56,8 @@
 //! ### Template Builder Pattern
 //!
 //! ```rust
-//! use dtu_notes::core::template_engine::{TemplateBuilder, TemplateType};
-//! use dtu_notes::config::Config;
+//! use noter::core::template_engine::{TemplateBuilder, TemplateType};
+//! use noter::config::Config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let config = Config::default();
@@ -99,6 +99,8 @@ pub mod commands;
 pub mod config;
 pub mod core;
 pub mod data;
+#[cfg(feature = "dev-tools")]
+pub mod dev;
 pub mod ui;
 
 use clap::Subcommand;
@@ -413,10 +415,10 @@ pub enum DevAction {
 
 // Re-export commonly used types for easier access
 pub use config::{Config, get_config};
+pub use core::status::{HealthStatus, StatusManager};
+pub use core::typst::{CompilationStatus, TypstCompiler};
 #[cfg(feature = "dev-tools")]
-pub use core::dev_data_generator::{CleanupStats, Course, DevDataGenerator, GenerationStats};
-pub use core::status_manager::{HealthStatus, StatusManager};
-pub use core::typst_compiler::{CompilationStatus, TypstCompiler};
+pub use dev::generator::{CleanupStats, Course, DevDataGenerator, GenerationStats};
 
 /// Current version of the DTU Notes library
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

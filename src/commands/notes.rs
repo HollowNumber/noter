@@ -3,9 +3,9 @@
 //! Handles lecture note creation, opening, and listing using core business logic.
 
 use crate::config::get_config;
-use crate::core::directory_scanner::DirectoryScanner;
-use crate::core::file_operations::FileOperations;
-use crate::core::status_manager::StatusManager;
+use crate::core::directories::DirectoryScanner;
+use crate::core::files::FileOperations;
+use crate::core::status::StatusManager;
 use crate::core::template::{builder::TemplateBuilder, engine::TemplateReference};
 use crate::core::validation::Validator;
 use crate::ui::output::{OutputManager, Status};

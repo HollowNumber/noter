@@ -39,15 +39,12 @@ fn display_value(value: &Value, indent: usize, key: &str) {
             } else {
                 println!("{}{}", indent_str, key.green().bold());
                 for (i, item) in arr.iter().enumerate() {
-                    match item {
-                        Value::Object(_) => {
-                            println!("{}  {}:", indent_str, format!("[{}]", i).yellow());
-                            display_value(item, indent + 1, "");
-                        }
-                        _ => {
-                            print!("{}  - ", indent_str);
-                            display_value(item, 0, "");
-                        }
+                    if let Value::Object(_) = item {
+                        println!("{}  {}:", indent_str, format!("[{i}]").yellow());
+                        display_value(item, indent + 1, "");
+                    } else {
+                        print!("{indent_str}  - ");
+                        display_value(item, 0, "");
                     }
                 }
             }

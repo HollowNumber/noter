@@ -6,7 +6,7 @@ use anyhow::Result;
 use colored::Colorize;
 
 use crate::config::get_config;
-use crate::core::typst_compiler::{CompilationStatus, TypstCompiler};
+use crate::core::typst::{CompilationStatus, TypstCompiler};
 use crate::ui::output::{OutputManager, Status};
 
 pub fn compile_file(filepath: &str) -> Result<()> {
@@ -249,7 +249,7 @@ pub fn check_all_files(detailed: bool) -> Result<()> {
 
     OutputManager::print_status(Status::Loading, "Scanning for Typst files...");
 
-    use crate::core::file_operations::FileOperations;
+    use crate::core::files::FileOperations;
     use std::path::Path;
 
     let mut all_files = Vec::new();

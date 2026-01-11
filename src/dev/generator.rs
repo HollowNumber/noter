@@ -292,7 +292,7 @@ impl DevDataGenerator {
     }
 
     fn generate_course_info(&self, course_dir: &Path, course: &Course) -> Result<()> {
-        let content = super::sample_content::CourseInfoTemplate::generate(course);
+        let content = super::sample::CourseInfoTemplate::generate(course);
         let file_path = course_dir.join("course_info.typ");
         fs::write(file_path, content)?;
         Ok(())
@@ -304,11 +304,11 @@ impl DevDataGenerator {
         course: &Course,
         lecture_num: usize,
     ) -> Result<()> {
-        let topics = super::sample_content::get_lecture_topics(&course.code);
+        let topics = super::sample::get_lecture_topics(&course.code);
         let topic = &topics[lecture_num % topics.len()];
         let date = Utc::now() - Duration::days(self.rng.random_range(1..180));
 
-        let content = super::sample_content::LectureTemplate::generate(
+        let content = super::sample::LectureTemplate::generate(
             lecture_num,
             topic,
             course,
@@ -340,7 +340,7 @@ impl DevDataGenerator {
         let assignments_dir = course_dir.join("assignments");
         fs::create_dir_all(&assignments_dir)?;
 
-        let content = super::sample_content::AssignmentTemplate::generate(
+        let content = super::sample::AssignmentTemplate::generate(
             assignment_num,
             assignment_type,
             course,
@@ -355,16 +355,13 @@ impl DevDataGenerator {
 
     fn generate_study_materials(&self, course_dir: &Path, course: &Course) -> Result<()> {
         // Generate course summary
-        let summary_content = super::sample_content::StudyMaterialsTemplate::generate(
-            "Summary",
-            course,
-            "Course Overview",
-        );
+        let summary_content =
+            super::sample::StudyMaterialsTemplate::generate("Summary", course, "Course Overview");
         let summary_path = course_dir.join("course_summary.typ");
         fs::write(summary_path, summary_content)?;
 
         // Generate cheat sheet
-        let cheat_sheet_content = super::sample_content::StudyMaterialsTemplate::generate(
+        let cheat_sheet_content = super::sample::StudyMaterialsTemplate::generate(
             "Cheat Sheet",
             course,
             "Quick Reference",
@@ -373,7 +370,7 @@ impl DevDataGenerator {
         fs::write(cheat_sheet_path, cheat_sheet_content)?;
 
         // Generate study guide
-        let study_guide_content = super::sample_content::StudyMaterialsTemplate::generate(
+        let study_guide_content = super::sample::StudyMaterialsTemplate::generate(
             "Study Guide",
             course,
             "Exam Preparation",

@@ -8,8 +8,8 @@ use std::fs;
 use std::path::Path;
 
 use crate::config::{Config, get_config};
-use crate::core::github_template_fetcher::GitHubTemplateFetcher;
 use crate::core::template::config::{TemplateConfig, TemplateVariant};
+use crate::core::template::fetcher::Fetcher;
 use crate::core::template::{
     builder::TemplateBuilder, discovery::TemplateDiscovery, engine::TemplateReference,
 };
@@ -184,7 +184,7 @@ fn display_github_template_status(config: &Config) {
     println!();
     OutputManager::print_status(Status::Loading, "Checking installation status...");
 
-    match GitHubTemplateFetcher::check_template_status(config) {
+    match Fetcher::check_template_status(config) {
         Ok(statuses) => {
             if statuses.is_empty() {
                 println!("  No template repositories configured");
@@ -250,7 +250,7 @@ pub fn update_template() -> Result<()> {
     OutputManager::print_status(Status::Loading, "Checking for template updates...");
 
     // Update templates
-    let results = GitHubTemplateFetcher::update_templates(&config)?;
+    let results = Fetcher::update_templates(&config)?;
 
     if results.is_empty() {
         OutputManager::print_status(
@@ -303,7 +303,7 @@ pub fn update_template() -> Result<()> {
         Err(e) => {
             OutputManager::print_status(
                 Status::Warning,
-                &format!("Template verification failed: {}", e),
+                &format!("Template verification failed: {e}"),
             );
         }
     }
@@ -330,7 +330,7 @@ pub fn reinstall_template() -> Result<()> {
     fs::create_dir_all(templates_dir)?;
 
     // Re-download templates
-    let results = GitHubTemplateFetcher::update_templates(&config)?;
+    let results = Fetcher::update_templates(&config)?;
 
     if results.is_empty() {
         OutputManager::print_status(Status::Error, "No templates were installed");
@@ -508,13 +508,10 @@ fn generate_custom_template_filename(course_id: &str, template_type: &str, title
     let date = Local::now().format("%Y-%m-%d").to_string();
     let template_part = template_type.replace(' ', "-").to_lowercase();
 
-    if !title.is_empty() {
-        let title_part = title.replace(' ', "-").to_lowercase();
-        format!(
-            "{}-{}-{}-{}.typ",
-            date, course_id, template_part, title_part
-        )
+    if title.is_empty() {
+        format!("{date}-{course_id}-{template_part}.typ")
     } else {
-        format!("{}-{}-{}.typ", date, course_id, template_part)
+        let title_part = title.replace(' ', "-").to_lowercase();
+        format!("{date}-{course_id}-{template_part}-{title_part}.typ")
     }
 }

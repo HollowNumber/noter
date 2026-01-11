@@ -41,10 +41,10 @@ pub struct TemplateDownloadResult {
     pub is_cached: bool,
 }
 
-pub struct GitHubTemplateFetcher;
+pub struct Fetcher;
 
 #[allow(dead_code)]
-impl GitHubTemplateFetcher {
+impl Fetcher {
     /// Get the latest release information from a specific GitHub repository
     pub fn get_latest_release(repo: &str) -> Result<GitHubRelease> {
         let url = format!("{GITHUB_API_BASE}/repos/{repo}/releases/latest");
@@ -375,7 +375,7 @@ impl GitHubTemplateFetcher {
 
     /// Copy template structure preserving directory layout
     fn copy_template_structure(source: &Path, dest: &Path) -> Result<()> {
-        use crate::core::file_operations::FileOperations;
+        use crate::core::files::FileOperations;
 
         if !source.exists() {
             return Err(anyhow::anyhow!(
@@ -560,7 +560,7 @@ mod tests {
 
     #[test]
     fn test_fetch_latest_release() {
-        let result = GitHubTemplateFetcher::get_latest_release(DEFAULT_TEMPLATE_REPO);
+        let result = Fetcher::get_latest_release(DEFAULT_TEMPLATE_REPO);
         assert!(result.is_ok(), "Should be able to fetch latest release");
 
         let release = result.unwrap();
@@ -570,7 +570,7 @@ mod tests {
 
     #[test]
     fn test_cache_path_generation() {
-        let path = GitHubTemplateFetcher::get_cache_path("test-template", "v1.0.0").unwrap();
+        let path = Fetcher::get_cache_path("test-template", "v1.0.0").unwrap();
         assert!(
             path.to_string_lossy()
                 .contains("test-template-v1.0.0.tar.gz")
@@ -600,7 +600,7 @@ mod tests {
             metadata: todo!(),
         };
 
-        let status = GitHubTemplateFetcher::check_template_status(&config).unwrap();
+        let status = Fetcher::check_template_status(&config).unwrap();
         assert_eq!(status, vec![("dtu_template".to_string(), None)]);
     }
 }

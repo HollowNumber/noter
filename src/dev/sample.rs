@@ -4,7 +4,7 @@
 //! course materials including lectures, assignments, and study materials.
 
 #[cfg(feature = "dev-tools")]
-use super::dev_data_generator::Course;
+use super::generator::Course;
 #[cfg(feature = "dev-tools")]
 use fake::{Fake, faker::lorem::en::*, faker::name::en::*};
 #[cfg(feature = "dev-tools")]
@@ -27,13 +27,13 @@ impl LectureTemplate {
 
         // Generate dynamic content
         let overview = Self::generate_overview(topic, &mut rng);
-        let concepts = Self::generate_concepts(topic, &mut rng);
+        let concepts = Self::generate_concepts(&mut rng);
         let examples = Self::generate_examples(course, topic, &mut rng);
         let problems = Self::generate_problems(topic, &mut rng);
         let references = Self::generate_references(lecture_num, &mut rng);
 
         format!(
-            r#"= Lecture {}: {} 
+            r#"= Lecture {}: {}
 *Course*: {} - {} \
 *Date*: {} \
 *Topic*: {}
@@ -111,7 +111,7 @@ impl LectureTemplate {
         )
     }
 
-    fn generate_concepts(topic: &str, rng: &mut impl Rng) -> ConceptContent {
+    fn generate_concepts(rng: &mut impl Rng) -> ConceptContent {
         let concept_types = [
             (
                 "definition and mathematical foundations",
@@ -200,7 +200,7 @@ impl LectureTemplate {
 def {}():
     """
     {}
-    
+
     Returns:
         Processed result demonstrating {} concepts
     """
@@ -463,7 +463,7 @@ Implement a {} that efficiently processes {}. Your solution should handle edge c
 
 === Requirements:
 - Clean, well-commented code following best practices
-- Comprehensive error handling and input validation  
+- Comprehensive error handling and input validation
 - Unit tests covering normal and edge cases
 - Performance analysis with Big-O notation
 

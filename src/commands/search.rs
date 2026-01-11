@@ -6,7 +6,7 @@ use anyhow::Result;
 use std::path::Path;
 
 use crate::config::{Config, get_config};
-use crate::core::directory_scanner::DirectoryScanner;
+use crate::core::directories::DirectoryScanner;
 use crate::core::search_engine::{SearchEngine, SearchLocation, SearchMatch, SearchOptions};
 use crate::ui::formatters::Formatters;
 use crate::ui::output::{OutputManager, Status};

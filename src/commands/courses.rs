@@ -3,7 +3,7 @@
 //! Thin command layer that delegates to core business logic.
 
 use crate::config::get_config;
-use crate::core::course_management::{CourseManager, get_common_courses};
+use crate::core::courses::{CourseManager, get_common_courses};
 use crate::core::validation::Validator;
 use crate::ui::formatters::Formatters;
 use crate::ui::output::{OutputManager, Status};

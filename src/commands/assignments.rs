@@ -8,7 +8,7 @@ use std::fs;
 use std::path::Path;
 
 use crate::config::get_config;
-use crate::core::file_operations::FileOperations;
+use crate::core::files::FileOperations;
 use crate::core::template::{builder::TemplateBuilder, engine::TemplateReference};
 use crate::core::validation::Validator;
 use crate::ui::output::{OutputManager, Status};

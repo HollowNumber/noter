@@ -424,7 +424,7 @@ impl Config {
     /// # Examples
     ///
     /// ```no_run
-    /// use dtu_notes::config::Config;
+    /// use noter::config::Config;
     ///
     /// let config = Config::load()?;
     /// println!("Author: {}", config.author);

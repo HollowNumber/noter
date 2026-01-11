@@ -34,6 +34,8 @@ mod commands;
 mod config;
 mod core;
 mod data;
+#[cfg(feature = "dev-tools")]
+mod dev;
 mod ui;
 
 use anyhow::Result;

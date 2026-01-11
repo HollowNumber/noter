@@ -6,7 +6,7 @@ use anyhow::Result;
 use colored::Colorize;
 
 use crate::config::get_config;
-use crate::core::status_manager::StatusManager;
+use crate::core::status::StatusManager;
 use crate::ui::output::{OutputManager, Status};
 
 #[allow(dead_code)]
@@ -175,7 +175,7 @@ pub fn list_courses() -> Result<()> {
 
 // Private helper functions for displaying status sections
 
-fn show_system_status_section(system_status: &crate::core::status_manager::SystemStatus) {
+fn show_system_status_section(system_status: &crate::core::status::SystemStatus) {
     println!("🏗️ System Status:");
     for (name, exists) in &system_status.directories {
         let status = if *exists { "✅".green() } else { "❌".red() };
@@ -195,7 +195,7 @@ fn show_system_status_section(system_status: &crate::core::status_manager::Syste
 }
 
 #[allow(dead_code)]
-fn show_activity_summary_section(activity_summary: &crate::core::status_manager::ActivitySummary) {
+fn show_activity_summary_section(activity_summary: &crate::core::status::ActivitySummary) {
     println!();
     println!("📈 Recent Activity:");
 
@@ -231,16 +231,16 @@ fn show_activity_summary_section(activity_summary: &crate::core::status_manager:
 }
 
 #[allow(dead_code)]
-fn show_course_health_section(course_health: &[crate::core::status_manager::CourseHealthInfo]) {
+fn show_course_health_section(course_health: &[crate::core::status::CourseHealthInfo]) {
     println!();
     println!("🎓 Course Health:");
 
     for health_info in course_health {
         let health_indicator = match health_info.health_status {
-            crate::core::status_manager::HealthStatus::Excellent => "✅",
-            crate::core::status_manager::HealthStatus::Good => "⚠️",
-            crate::core::status_manager::HealthStatus::Warning => "🔴",
-            crate::core::status_manager::HealthStatus::Critical => "❌",
+            crate::core::status::HealthStatus::Excellent => "✅",
+            crate::core::status::HealthStatus::Good => "⚠️",
+            crate::core::status::HealthStatus::Warning => "🔴",
+            crate::core::status::HealthStatus::Critical => "❌",
         };
 
         let last_activity = match health_info.days_since_last_activity {
@@ -265,9 +265,7 @@ fn show_course_health_section(course_health: &[crate::core::status_manager::Cour
 }
 
 #[allow(dead_code)]
-fn show_quick_suggestions(
-    activity_summary: &crate::core::status_manager::ActivitySummary,
-) -> Result<()> {
+fn show_quick_suggestions(activity_summary: &crate::core::status::ActivitySummary) -> Result<()> {
     println!("💡 Quick Suggestions:");
 
     if let Some((course_id, _)) = &activity_summary.most_active_course {

@@ -159,7 +159,7 @@ All public functions must have documentation:
 /// # Examples
 ///
 /// ```rust
-/// use dtu_notes::core::template_engine::TemplateEngine;
+/// use noter::core::template_engine::TemplateEngine;
 ///
 /// let config = Config::default();
 /// let template = TemplateEngine::generate_lecture_template("02101", &config, None)?;
@@ -215,7 +215,7 @@ mod tests {
 
 ```rust
 // tests/integration_tests.rs
-use dtu_notes::*;
+use noter::*;
 use tempfile::tempdir;
 
 #[test]

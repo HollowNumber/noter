@@ -7,7 +7,7 @@ use anyhow::Result;
 
 use crate::config::get_config;
 #[cfg(feature = "dev-tools")]
-use crate::core::dev_data_generator::DevDataGenerator;
+use crate::dev::generator::DevDataGenerator;
 
 /// Generate a high-yield simulation with many notes and assignments
 #[cfg(feature = "dev-tools")]
