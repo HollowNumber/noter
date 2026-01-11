@@ -10,7 +10,6 @@ use crate::core::directories::DirectoryScanner;
 use crate::core::search_engine::{SearchEngine, SearchLocation, SearchMatch, SearchOptions};
 use crate::display::formatters::Formatters;
 use crate::display::output::{OutputManager, Status};
-use crate::display::tui;
 
 pub fn search_notes(query: &str) -> Result<()> {
     let config = get_config()?;
