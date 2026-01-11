@@ -36,7 +36,7 @@ flate2 = "1.0.0"
 tar = "0.4.0"
 zip = "4.3.0"
 toml = "0.9.5"
-semver = "1.0.26"
+semver = "1.0.27"
 regex = "1.11.1"
 humansize = "2.1.3"
 
