@@ -3,7 +3,7 @@ use colored::*;
 use serde_json::Value;
 
 use crate::config::{Config, TemplateRepository, get_config, update_author, update_editor};
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 pub fn show_config() -> Result<()> {
     let config = get_config()?;

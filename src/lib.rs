@@ -101,7 +101,7 @@ pub mod core;
 pub mod data;
 #[cfg(feature = "dev-tools")]
 pub mod dev;
-pub mod ui;
+pub mod display;
 
 use clap::Subcommand;
 

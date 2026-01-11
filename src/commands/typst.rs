@@ -7,7 +7,7 @@ use colored::Colorize;
 
 use crate::config::get_config;
 use crate::core::typst::{CompilationStatus, TypstCompiler};
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 pub fn compile_file(filepath: &str) -> Result<()> {
     let config = get_config()?;

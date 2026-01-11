@@ -8,7 +8,7 @@ use crate::core::files::FileOperations;
 use crate::core::status::StatusManager;
 use crate::core::template::{builder::TemplateBuilder, engine::TemplateReference};
 use crate::core::validation::Validator;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 use anyhow::Result;
 use colored::Colorize;
 use std::fs;

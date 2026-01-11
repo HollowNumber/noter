@@ -14,8 +14,10 @@ use std::fs;
 use std::path::Path;
 use std::sync::{Mutex, OnceLock};
 
-use crate::config::Config;
-use crate::ui::output::{OutputManager, Status};
+use crate::{
+    config::Config,
+    display::output::{OutputManager, Status},
+};
 
 // Global tracking of generated courses for cleanup
 #[cfg(feature = "dev-tools")]

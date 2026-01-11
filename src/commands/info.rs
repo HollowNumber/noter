@@ -7,7 +7,7 @@ use colored::Colorize;
 
 use crate::config::get_config;
 use crate::core::status::StatusManager;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 #[allow(dead_code)]
 pub fn show_enhanced_status() -> Result<()> {

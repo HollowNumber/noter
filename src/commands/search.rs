@@ -8,8 +8,8 @@ use std::path::Path;
 use crate::config::{Config, get_config};
 use crate::core::directories::DirectoryScanner;
 use crate::core::search_engine::{SearchEngine, SearchLocation, SearchMatch, SearchOptions};
-use crate::ui::formatters::Formatters;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::formatters::Formatters;
+use crate::display::output::{OutputManager, Status};
 
 pub fn search_notes(query: &str) -> Result<()> {
     let config = get_config()?;

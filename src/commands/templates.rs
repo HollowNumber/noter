@@ -14,7 +14,7 @@ use crate::core::template::{
     builder::TemplateBuilder, discovery::TemplateDiscovery, engine::TemplateReference,
 };
 use crate::core::validation::Validator;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 /// Show template status and version information
 pub fn template_status() -> Result<()> {

@@ -7,8 +7,8 @@ use colored::Colorize;
 
 use crate::config::get_config;
 use crate::core::setup::{SetupConfig, SetupManager};
-use crate::ui::output::{OutputManager, Status};
-use crate::ui::prompts::PromptManager;
+use crate::display::output::{OutputManager, Status};
+use crate::display::prompts::PromptManager;
 
 /// Prompt for setup configuration options
 fn prompt_setup_options() -> Result<SetupConfig> {

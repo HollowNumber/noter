@@ -36,7 +36,7 @@ mod core;
 mod data;
 #[cfg(feature = "dev-tools")]
 mod dev;
-mod ui;
+mod display;
 
 use anyhow::Result;
 use clap::Parser;

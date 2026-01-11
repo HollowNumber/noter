@@ -11,7 +11,7 @@ use crate::config::get_config;
 use crate::core::files::FileOperations;
 use crate::core::template::{builder::TemplateBuilder, engine::TemplateReference};
 use crate::core::validation::Validator;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 /// Create a new assignment using the template system
 pub fn create_assignment(course_id: &str, title: &str) -> Result<()> {
