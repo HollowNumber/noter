@@ -2,7 +2,7 @@
 //!
 //! Handles searching through files with various options and filters.
 
-use crate::core::directory_scanner::DirectoryScanner;
+use crate::core::directories::DirectoryScanner;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

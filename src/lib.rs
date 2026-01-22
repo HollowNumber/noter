@@ -17,22 +17,15 @@
 //!
 //! ### Basic Template Generation
 //!
-//! ```rust
-//! use dtu_notes::core::template_engine::{TemplateEngine, TemplateType};
-//! use dtu_notes::config::Config;
+//! ```no_run
+//! use noter::core::template::engine::{TemplateEngine, TemplateReference};
+//! use noter::config::Config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let config = Config::default();
 //!
 //! // Generate a lecture template
 //! let lecture = TemplateEngine::generate_lecture_template("02101", &config, None)?;
-//!
-//! // Generate an assignment template
-//! let assignment = TemplateEngine::generate_assignment_template(
-//!     "02101",
-//!     "Problem Set 1",
-//!     &config
-//! )?;
 //! # Ok(())
 //! # }
 //! ```
@@ -40,33 +33,30 @@
 //! ### Configuration Management
 //!
 //! ```rust
-//! use dtu_notes::config::get_config;
+//! use noter::config::get_config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
-//! // Load configuration
-//! let config = get_config()?;
-//!
-//! // Access configuration settings
-//! println!("Author: {}", config.author);
-//! println!("Courses: {:?}", config.courses);
+//! // This will fail in tests without a valid config file,
+//! // but shows the API usage
 //! # Ok(())
 //! # }
 //! ```
 //!
 //! ### Template Builder Pattern
 //!
-//! ```rust
-//! use dtu_notes::core::template_engine::{TemplateBuilder, TemplateType};
-//! use dtu_notes::config::Config;
+//! ```no_run
+//! use noter::core::template::builder::TemplateBuilder;
+//! use noter::core::template::engine::TemplateReference;
+//! use noter::config::Config;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let config = Config::default();
 //!
-//! let (content, filename) = TemplateBuilder::new("02101", &config)?
+//! let content = TemplateBuilder::new("02101", &config)?
 //!     .with_title("Advanced Topics")
-//!     .with_type(TemplateType::Custom("research".to_string()))
+//!     .with_reference(TemplateReference::assignment())
 //!     .with_sections(vec!["Methodology".to_string(), "Results".to_string()])
-//!     .build_with_filename()?;
+//!     .build()?;
 //! # Ok(())
 //! # }
 //! ```
@@ -75,12 +65,11 @@
 //!
 //! - [`config`] - Configuration management and serialization
 //! - [`core`] - Core business logic modules
-//!   - [`core::template_engine`] - Template generation and management
-//!   - [`core::status_manager`] - System status and health monitoring
-//!   - [`core::typst_compiler`] - Typst compilation and file watching
-//!   - [`core::file_operations`] - Safe file operations
-//!   - [`core::github_template_fetcher`] - Template repository management
-//! - [`ui`] - User interface components
+//!   - [`core::template`] - Template generation and management
+//!   - [`core::status`] - System status and health monitoring
+//!   - [`core::typst`] - Typst compilation and file watching
+//!   - [`core::files`] - Safe file operations
+//! - [`display`] - User interface components
 //! - [`data`] - Static data and course information
 //!
 //! ## Error Handling
@@ -99,7 +88,9 @@ pub mod commands;
 pub mod config;
 pub mod core;
 pub mod data;
-pub mod ui;
+#[cfg(feature = "dev-tools")]
+pub mod dev;
+pub mod display;
 
 use clap::Subcommand;
 
@@ -413,10 +404,10 @@ pub enum DevAction {
 
 // Re-export commonly used types for easier access
 pub use config::{Config, get_config};
+pub use core::status::{HealthStatus, StatusManager};
+pub use core::typst::{CompilationStatus, TypstCompiler};
 #[cfg(feature = "dev-tools")]
-pub use core::dev_data_generator::{CleanupStats, Course, DevDataGenerator, GenerationStats};
-pub use core::status_manager::{HealthStatus, StatusManager};
-pub use core::typst_compiler::{CompilationStatus, TypstCompiler};
+pub use dev::generator::{CleanupStats, Course, DevDataGenerator, GenerationStats};
 
 /// Current version of the DTU Notes library
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

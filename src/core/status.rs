@@ -3,7 +3,7 @@
 //! Handles status checking, activity summaries, and course health monitoring.
 
 use crate::config::Config;
-use crate::core::directory_scanner::{CourseStats, DirectoryScanner};
+use crate::core::directories::{CourseStats, DirectoryScanner};
 use anyhow::Result;
 use chrono::Datelike;
 use std::collections::HashMap;

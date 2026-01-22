@@ -1,12 +1,12 @@
 [package]
-name = "dtu-notes"
+name = "noter"
 version = "0.6.2"
 edition = "2024"
 description = "DTU note-taking CLI with Typst and Obsidian integration"
 authors = ["Mikkel M.H Pedersen"]
 license = "MIT"
-repository = "https://github.com/HollowNumber/dtu-notes"
-homepage = "https://github.com/HollowNumber/dtu-notes"
+repository = "https://github.com/HollowNumber/noter"
+homepage = "https://github.com/HollowNumber/noter"
 readme = "README.md"
 keywords = ["cli", "notes", "typst", "dtu", "education"]
 categories = ["command-line-utilities", "text-processing"]

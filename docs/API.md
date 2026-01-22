@@ -406,7 +406,7 @@ Integration tests are located in `tests/` directory:
 
 ```rust
 // tests/template_integration.rs
-use dtu_notes::*;
+use noter::*;
 
 #[test]
 fn test_full_template_workflow() {

@@ -3,10 +3,10 @@
 //! Thin command layer that delegates to core business logic.
 
 use crate::config::get_config;
-use crate::core::course_management::{CourseManager, get_common_courses};
+use crate::core::courses::{CourseManager, get_common_courses};
 use crate::core::validation::Validator;
-use crate::ui::formatters::Formatters;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::formatters::Formatters;
+use crate::display::output::{OutputManager, Status};
 use anyhow::Result;
 use colored::Colorize;
 
