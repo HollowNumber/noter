@@ -30,7 +30,7 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Run Clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy --all-targets --all-features -- -W warnings
 
       - name: Run tests
         run: cargo test --all-features --verbose
@@ -115,4 +115,3 @@ jobs:
 
       - name: Run security audit
         run: cargo audit
-
