@@ -44,11 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
 
 
-### Removed
-
-- Removed unused `get_course_name` function in `data.rs`
-
-
 **Full Changelog**: https://github.com/HollowNumber/noter/compare/v0.6.1...v0.7.0
 
 ## [0.6.1] - 2025-11-06
