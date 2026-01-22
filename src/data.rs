@@ -33,11 +33,11 @@ pub fn get_common_dtu_courses() -> HashMap<&'static str, &'static str> {
         // Add all your other courses here...
     ]
     .iter()
-    .cloned()
+    .copied()
     .collect()
 }
 
-#[allow(dead_code)]
+#[must_use]
 pub fn get_course_name(course_id: &str) -> String {
     get_common_dtu_courses()
         .get(course_id)
