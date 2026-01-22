@@ -11,7 +11,7 @@ use std::collections::HashMap;
 
 use super::config::{EngineConfig, TemplateConfig};
 use crate::config::Config;
-use crate::core::status_manager::StatusManager;
+use crate::core::status::StatusManager;
 
 /// Rich context structure containing all metadata needed for template generation.
 ///

@@ -7,10 +7,8 @@
 use anyhow::{Context, Result};
 
 pub mod assignments;
-pub mod config_cmd;
+pub mod config;
 pub mod courses;
-#[cfg(feature = "dev-tools")]
-pub mod dev_tools;
 pub mod info;
 pub mod notes;
 pub mod search;
@@ -145,38 +143,38 @@ fn execute_template_action(action: &TemplateAction) -> Result<()> {
 
 fn execute_config_action(action: &ConfigAction) -> Result<()> {
     match action {
-        ConfigAction::Show => config_cmd::show_config(),
-        ConfigAction::Get { key } => config_cmd::get_config_value(key),
-        ConfigAction::Set { key, value } => config_cmd::set_config_value(key, value),
-        ConfigAction::Edit => config_cmd::edit_config(),
-        ConfigAction::ListKeys => config_cmd::list_config_keys(),
-        ConfigAction::Interactive => config_cmd::interactive_config(),
-        ConfigAction::SetAuthor { name } => config_cmd::set_author(name),
-        ConfigAction::SetEditor { editor } => config_cmd::set_editor(editor),
+        ConfigAction::Show => config::show_config(),
+        ConfigAction::Get { key } => config::get_config_value(key),
+        ConfigAction::Set { key, value } => config::set_config_value(key, value),
+        ConfigAction::Edit => config::edit_config(),
+        ConfigAction::ListKeys => config::list_config_keys(),
+        ConfigAction::Interactive => config::interactive_config(),
+        ConfigAction::SetAuthor { name } => config::set_author(name),
+        ConfigAction::SetEditor { editor } => config::set_editor(editor),
         ConfigAction::AddTemplateRepo {
             name,
             repository,
             version,
             template_path,
-        } => config_cmd::add_template_repository(
+        } => config::add_template_repository(
             name,
             repository,
             version.as_deref(),
             template_path.as_deref(),
         ),
-        ConfigAction::RemoveTemplateRepo { name } => config_cmd::remove_template_repository(name),
+        ConfigAction::RemoveTemplateRepo { name } => config::remove_template_repository(name),
         ConfigAction::EnableTemplateRepo { name, enabled } => {
-            config_cmd::enable_template_repository(name, *enabled)
+            config::enable_template_repository(name, *enabled)
         }
-        ConfigAction::ListTemplateRepos => config_cmd::list_template_repositories(),
+        ConfigAction::ListTemplateRepos => config::list_template_repositories(),
         ConfigAction::SetTemplateAutoUpdate { enabled } => {
-            config_cmd::set_template_auto_update(*enabled)
+            config::set_template_auto_update(*enabled)
         }
-        ConfigAction::Reset => config_cmd::reset_config(),
-        ConfigAction::Path => config_cmd::show_config_path(),
-        ConfigAction::Check => config_cmd::check_config(),
-        ConfigAction::Cleanse { yes } => config_cmd::cleanse_config(*yes),
-        ConfigAction::Migrate => config_cmd::migrate_config(),
+        ConfigAction::Reset => config::reset_config(),
+        ConfigAction::Path => config::show_config_path(),
+        ConfigAction::Check => config::check_config(),
+        ConfigAction::Cleanse { yes } => config::cleanse_config(*yes),
+        ConfigAction::Migrate => config::migrate_config(),
     }
 }
 
@@ -194,13 +192,15 @@ fn execute_course_action(action: &CourseAction) -> Result<()> {
 
 #[cfg(feature = "dev-tools")]
 fn execute_dev_action(action: &DevAction) -> Result<()> {
+    use crate::dev::tools;
+
     match action {
-        DevAction::Simulate => dev_tools::simulate_high_yield_setup(),
+        DevAction::Simulate => tools::simulate_high_yield_setup(),
         DevAction::Generate {
             courses,
             notes,
             assignments,
-        } => dev_tools::generate_sample_data(*courses, *notes, *assignments),
-        DevAction::Clean => dev_tools::clean_dev_data(),
+        } => tools::generate_sample_data(*courses, *notes, *assignments),
+        DevAction::Clean => tools::clean_dev_data(),
     }
 }

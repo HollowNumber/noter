@@ -34,7 +34,9 @@ mod commands;
 mod config;
 mod core;
 mod data;
-mod ui;
+#[cfg(feature = "dev-tools")]
+mod dev;
+mod display;
 
 use anyhow::Result;
 use clap::Parser;

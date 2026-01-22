@@ -14,8 +14,10 @@ use std::fs;
 use std::path::Path;
 use std::sync::{Mutex, OnceLock};
 
-use crate::config::Config;
-use crate::ui::output::{OutputManager, Status};
+use crate::{
+    config::Config,
+    display::output::{OutputManager, Status},
+};
 
 // Global tracking of generated courses for cleanup
 #[cfg(feature = "dev-tools")]
@@ -232,7 +234,7 @@ impl DevDataGenerator {
         }
 
         // Also detect courses that match our generated pattern (02100xx format)
-        for (course_code, _) in &config.courses {
+        for course_code in config.courses.keys() {
             if course_code.starts_with("021") && course_code.len() == 7 {
                 // This looks like a dynamically generated course code
                 all_courses_to_remove.insert(course_code.clone());
@@ -270,7 +272,7 @@ impl DevDataGenerator {
                 }
 
                 fs::remove_dir_all(&course_dir)?;
-                OutputManager::print_status(Status::Info, &format!("Removed {}", course_code));
+                OutputManager::print_status(Status::Info, &format!("Removed {course_code}"));
                 stats.directories_removed += 1;
             }
         }
@@ -292,7 +294,7 @@ impl DevDataGenerator {
     }
 
     fn generate_course_info(&self, course_dir: &Path, course: &Course) -> Result<()> {
-        let content = super::sample_content::CourseInfoTemplate::generate(course);
+        let content = super::sample::CourseInfoTemplate::generate(course);
         let file_path = course_dir.join("course_info.typ");
         fs::write(file_path, content)?;
         Ok(())
@@ -304,11 +306,11 @@ impl DevDataGenerator {
         course: &Course,
         lecture_num: usize,
     ) -> Result<()> {
-        let topics = super::sample_content::get_lecture_topics(&course.code);
+        let topics = super::sample::get_lecture_topics(&course.code);
         let topic = &topics[lecture_num % topics.len()];
         let date = Utc::now() - Duration::days(self.rng.random_range(1..180));
 
-        let content = super::sample_content::LectureTemplate::generate(
+        let content = super::sample::LectureTemplate::generate(
             lecture_num,
             topic,
             course,
@@ -340,7 +342,7 @@ impl DevDataGenerator {
         let assignments_dir = course_dir.join("assignments");
         fs::create_dir_all(&assignments_dir)?;
 
-        let content = super::sample_content::AssignmentTemplate::generate(
+        let content = super::sample::AssignmentTemplate::generate(
             assignment_num,
             assignment_type,
             course,
@@ -355,16 +357,13 @@ impl DevDataGenerator {
 
     fn generate_study_materials(&self, course_dir: &Path, course: &Course) -> Result<()> {
         // Generate course summary
-        let summary_content = super::sample_content::StudyMaterialsTemplate::generate(
-            "Summary",
-            course,
-            "Course Overview",
-        );
+        let summary_content =
+            super::sample::StudyMaterialsTemplate::generate("Summary", course, "Course Overview");
         let summary_path = course_dir.join("course_summary.typ");
         fs::write(summary_path, summary_content)?;
 
         // Generate cheat sheet
-        let cheat_sheet_content = super::sample_content::StudyMaterialsTemplate::generate(
+        let cheat_sheet_content = super::sample::StudyMaterialsTemplate::generate(
             "Cheat Sheet",
             course,
             "Quick Reference",
@@ -373,7 +372,7 @@ impl DevDataGenerator {
         fs::write(cheat_sheet_path, cheat_sheet_content)?;
 
         // Generate study guide
-        let study_guide_content = super::sample_content::StudyMaterialsTemplate::generate(
+        let study_guide_content = super::sample::StudyMaterialsTemplate::generate(
             "Study Guide",
             course,
             "Exam Preparation",
