@@ -11,14 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Doc tests not working
-- Fixed some clippy warnings
+- Fixed some `clippy` warnings
 
 ### Changed 
 
 - Separated Config files into their own files
 - Renamed binary and references to noter.
 - Removed emojis from pr template
-- Made clippy warnings not deny ci
+- Made `clippy` warnings not deny ci
+- Made `ci.yml` not run builds on every push 
 
 #### Breaking changes
 
