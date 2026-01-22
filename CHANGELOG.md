@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [0.7.0] - 2026-01-22
+
 
 ### Fixed
 
@@ -20,11 +21,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed emojis from pr template
 - Made `clippy` warnings not deny ci
 - Made `ci.yml` not run builds on every push 
+* Change template fetching logic to stop removing old template versions by @HollowNumber in https://github.com/HollowNumber/noter/pull/35
+* deps: bump opener from 0.8.2 to 0.8.3 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/11
+* deps: bump chrono from 0.4.41 to 0.4.42 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/12
+* Chore/mp/great rename by @HollowNumber in https://github.com/HollowNumber/noter/pull/43
+* ci: bump actions/upload-artifact from 4 to 6 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/42
+* ci: bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/41
+* deps: bump clap from 4.5.45 to 4.5.51 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/39
+* deps: bump serde from 1.0.219 to 1.0.228 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/36
+* ci: bump softprops/action-gh-release from 1 to 2 by @dependabot[bot] in https://github.com/HollowNumber/noter/pull/26
+* deps: bump serde_json from 1.0.142 to 1.0.145
+* deps: bump anyhow from 1.0.98 to 1.0.100
+* deps: bump ureq from 3.0.12 to 3.1.4
+* deps: bump flate2 from 1.0.0 to 1.1.5
+* deps: bump zip from 4.3.0 to 6.0.0
+* deps: bump semver from 1.0.26 to 1.0.27
+* deps: bump regex from 1.11.1 to 1.12.2 
+
 
 #### Breaking changes
 
 - `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
 
+
+### Removed
+
+- Removed unused `get_course_name` function in `data.rs`
+
+
+**Full Changelog**: https://github.com/HollowNumber/noter/compare/v0.6.1...v0.7.0
 
 ## [0.6.1] - 2025-11-06
 
