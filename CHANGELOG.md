@@ -13,16 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Doc tests not working
 - Fixed some clippy warnings
 
-### Breaking changes
-
-- `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
-
 ### Changed 
 
 - Separated Config files into their own files
 - Renamed binary and references to noter.
 - Removed emojis from pr template
 - Made clippy warnings not deny ci
+
+#### Breaking changes
+
+- `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
 
 
 ## [0.6.1] - 2025-11-06
