@@ -22,13 +22,20 @@ use crate::config::Config;
 ///
 /// ## Usage Examples
 ///
-/// ```rust
+/// ```no_run
+/// use noter::core::template::engine::TemplateReference;
+/// use noter::core::template::builder::TemplateBuilder;
+/// use noter::config::Config;
+///
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// # let config = Config::default();
 /// let content = TemplateBuilder::new("02101", &config)?
 ///     .with_title("Advanced Data Structures")
 ///     .with_reference(TemplateReference::assignment())
 ///     .with_sections(vec!["Problem 1".to_string(), "Analysis".to_string()])
-///     .with_custom_field("difficulty", "advanced")
 ///     .build()?;
+/// # Ok(())
+/// # }
 /// ```
 pub struct TemplateBuilder {
     context_builder: TemplateContextBuilder,
