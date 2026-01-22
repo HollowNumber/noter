@@ -8,14 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Doc tests not working
+
+### Breaking changes
+
+- `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
+
 ### Changed 
 
 - Separated Config files into their own files
 - Renamed binary and references to noter.
 
-### Breaking changes
-
-- `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
 
 ## [0.6.1] - 2025-11-06
 
