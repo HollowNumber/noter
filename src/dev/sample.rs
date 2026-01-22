@@ -308,12 +308,14 @@ def performance_benchmark():
             "Google Developer Documentation",
         ];
 
+        let author_email = format!("{}@dtu.dk", Word().fake::<String>().to_lowercase());
+
         format!(
             "- Course textbook, Chapter {}\n- {}\n- {}\n- Supplementary reading: {}",
             lecture_num % 15 + 1,
             textbooks[rng.random_range(0..textbooks.len())],
             online_resources[rng.random_range(0..online_resources.len())],
-            format!("{}@dtu.dk", Word().fake::<String>().to_lowercase())
+            author_email
         )
     }
 }
@@ -1074,7 +1076,7 @@ By the end of this study session, you should be able to:
     }
 
     // Helper methods for content generation
-    fn generate_key_points(topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_key_points(_topic: &str, rng: &mut impl Rng) -> String {
         (1..=rng.random_range(4..7))
             .map(|i| {
                 format!(
@@ -1343,7 +1345,7 @@ By the end of this study session, you should be able to:
             .join("\n\n")
     }
 
-    fn generate_challenge_problems(rng: &mut impl Rng) -> String {
+    fn generate_challenge_problems(_rng: &mut impl Rng) -> String {
         (1..=2)
             .map(|i| {
                 format!(
