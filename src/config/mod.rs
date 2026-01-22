@@ -237,8 +237,10 @@ mod tests {
 
     #[test]
     fn test_editor_list() {
-        let mut config = Config::default();
-        config.preferred_editor = Some("emacs".to_string());
+        let config = Config {
+            preferred_editor: Some("emacs".into()),
+            ..Default::default()
+        };
 
         let editors = config.get_editor_list();
         assert_eq!(editors[0], "emacs");

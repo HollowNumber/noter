@@ -597,8 +597,8 @@ mod tests {
             typst: crate::config::TypstConfig::default(),
             search: crate::config::SearchConfig::default(),
             courses: std::collections::HashMap::new(),
-            obsidian_integration: todo!(),
-            metadata: todo!(),
+            obsidian_integration: ObsidianIntegrationConfig::default(),
+            metadata: Metadata::default(),
         };
 
         let status = Fetcher::check_template_status(&config).unwrap();

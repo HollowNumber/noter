@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub enum SemesterFormat {
     /// "2024 Spring", "2024 Fall"
+    #[default]
     YearSeason,
     /// "Spring 2024", "Fall 2024"
     SeasonYear,
@@ -10,10 +11,4 @@ pub enum SemesterFormat {
     ShortForm,
     /// Custom format string
     Custom(String),
-}
-
-impl Default for SemesterFormat {
-    fn default() -> Self {
-        SemesterFormat::YearSeason
-    }
 }

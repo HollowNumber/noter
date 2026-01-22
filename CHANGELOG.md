@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Doc tests not working
+- Fixed some clippy warnings
 
 ### Breaking changes
 

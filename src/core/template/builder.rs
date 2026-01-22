@@ -570,23 +570,26 @@ mod tests {
 
     #[test]
     fn test_validation_result_methods() {
-        let mut issues = Vec::new();
-        issues.push(ValidationIssue {
-            severity: ValidationSeverity::Error,
-            category: "test".to_string(),
-            message: "Test error".to_string(),
-            suggestion: None,
-            location: None,
-        });
-        issues.push(ValidationIssue {
-            severity: ValidationSeverity::Warning,
-            category: "test".to_string(),
-            message: "Test warning".to_string(),
-            suggestion: None,
-            location: None,
-        });
+        let issues = [
+            ValidationIssue {
+                severity: ValidationSeverity::Error,
+                category: "test".to_string(),
+                message: "Test error".to_string(),
+                suggestion: None,
+                location: None,
+            },
+            ValidationIssue {
+                severity: ValidationSeverity::Warning,
+                category: "test".to_string(),
+                message: "Test warning".to_string(),
+                suggestion: None,
+                location: None,
+            },
+        ];
 
-        let result = ValidationResult { issues };
+        let result = ValidationResult {
+            issues: issues.into(),
+        };
 
         assert!(result.has_errors());
         assert!(result.has_warnings());

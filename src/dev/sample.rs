@@ -6,9 +6,13 @@
 #[cfg(feature = "dev-tools")]
 use super::generator::Course;
 #[cfg(feature = "dev-tools")]
-use fake::{Fake, faker::lorem::en::*, faker::name::en::*};
+use fake::{
+    Fake,
+    faker::lorem::en::{Sentence, Word, Words},
+    faker::name::en::Name,
+};
 #[cfg(feature = "dev-tools")]
-use rand::{Rng, SeedableRng, prelude::IndexedRandom, rngs::StdRng, seq::SliceRandom};
+use rand::{Rng, SeedableRng, prelude::IndexedRandom, rngs::StdRng};
 
 /// Template generator for course information files
 /// Template generator for lecture notes
@@ -163,13 +167,13 @@ impl LectureTemplate {
             ),
             secondary_topics: selected_secondary
                 .iter()
-                .map(|topic| format!("- {}", topic))
+                .map(|topic| format!("- {topic}"))
                 .collect::<Vec<_>>()
                 .join("\n"),
         }
     }
 
-    fn generate_examples(course: &Course, topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_examples(_course: &Course, topic: &str, rng: &mut impl Rng) -> String {
         let languages = ["python", "rust", "java", "javascript", "cpp"];
         let lang = languages[rng.random_range(0..languages.len())];
 
@@ -641,7 +645,7 @@ Propose a novel solution or improvement:
         )
     }
 
-    fn generate_generic_problems(rng: &mut impl Rng) -> String {
+    fn generate_generic_problems(_rng: &mut impl Rng) -> String {
         format!(
             r#"== Problem 1: Core Concepts (35 points)
 Demonstrate your understanding of the fundamental concepts by:
@@ -1097,7 +1101,7 @@ By the end of this study session, you should be able to:
             .join("\n")
     }
 
-    fn generate_examples(topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_examples(_topic: &str, rng: &mut impl Rng) -> String {
         let example_types = [
             "Real-world application",
             "Code example",

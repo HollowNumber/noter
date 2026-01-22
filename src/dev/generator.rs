@@ -234,7 +234,7 @@ impl DevDataGenerator {
         }
 
         // Also detect courses that match our generated pattern (02100xx format)
-        for (course_code, _) in &config.courses {
+        for course_code in config.courses.keys() {
             if course_code.starts_with("021") && course_code.len() == 7 {
                 // This looks like a dynamically generated course code
                 all_courses_to_remove.insert(course_code.clone());
@@ -272,7 +272,7 @@ impl DevDataGenerator {
                 }
 
                 fs::remove_dir_all(&course_dir)?;
-                OutputManager::print_status(Status::Info, &format!("Removed {}", course_code));
+                OutputManager::print_status(Status::Info, &format!("Removed {course_code}"));
                 stats.directories_removed += 1;
             }
         }
