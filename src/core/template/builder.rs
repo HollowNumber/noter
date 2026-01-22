@@ -22,13 +22,20 @@ use crate::config::Config;
 ///
 /// ## Usage Examples
 ///
-/// ```rust
+/// ```no_run
+/// use noter::core::template::engine::TemplateReference;
+/// use noter::core::template::builder::TemplateBuilder;
+/// use noter::config::Config;
+///
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// # let config = Config::default();
 /// let content = TemplateBuilder::new("02101", &config)?
 ///     .with_title("Advanced Data Structures")
 ///     .with_reference(TemplateReference::assignment())
 ///     .with_sections(vec!["Problem 1".to_string(), "Analysis".to_string()])
-///     .with_custom_field("difficulty", "advanced")
 ///     .build()?;
+/// # Ok(())
+/// # }
 /// ```
 pub struct TemplateBuilder {
     context_builder: TemplateContextBuilder,
@@ -563,23 +570,26 @@ mod tests {
 
     #[test]
     fn test_validation_result_methods() {
-        let mut issues = Vec::new();
-        issues.push(ValidationIssue {
-            severity: ValidationSeverity::Error,
-            category: "test".to_string(),
-            message: "Test error".to_string(),
-            suggestion: None,
-            location: None,
-        });
-        issues.push(ValidationIssue {
-            severity: ValidationSeverity::Warning,
-            category: "test".to_string(),
-            message: "Test warning".to_string(),
-            suggestion: None,
-            location: None,
-        });
+        let issues = [
+            ValidationIssue {
+                severity: ValidationSeverity::Error,
+                category: "test".to_string(),
+                message: "Test error".to_string(),
+                suggestion: None,
+                location: None,
+            },
+            ValidationIssue {
+                severity: ValidationSeverity::Warning,
+                category: "test".to_string(),
+                message: "Test warning".to_string(),
+                suggestion: None,
+                location: None,
+            },
+        ];
 
-        let result = ValidationResult { issues };
+        let result = ValidationResult {
+            issues: issues.into(),
+        };
 
         assert!(result.has_errors());
         assert!(result.has_warnings());

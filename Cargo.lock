@@ -445,31 +445,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dtu-notes"
-version = "0.6.2"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "colored",
- "dirs",
- "fake",
- "flate2",
- "humansize",
- "opener",
- "rand",
- "regex",
- "semver",
- "serde",
- "serde_json",
- "tar",
- "tempfile",
- "toml",
- "ureq",
- "zip",
-]
-
-[[package]]
 name = "dummy"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -836,9 +811,9 @@ checksum = "2c4a545a15244c7d945065b5d392b2d2d7f21526fba56ce51467b06ed445e8f7"
 
 [[package]]
 name = "libc"
-version = "0.2.175"
+version = "0.2.180"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a82ae493e598baaea5209805c49bbf2ea7de956d50d7da0da1164f9c6d28543"
+checksum = "bcc35a38544a891a5f7c865aca548a982ccb3b8650a5b06d0fd33a10283c56fc"
 
 [[package]]
 name = "liblzma"
@@ -932,6 +907,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8911957c4b1549ac0dc74e30db9c8b0e66ddcd6d7acc33098f4c63a64a6d7ed"
 dependencies = [
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "noter"
+version = "0.6.2"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "colored",
+ "dirs",
+ "fake",
+ "flate2",
+ "humansize",
+ "opener",
+ "rand",
+ "regex",
+ "semver",
+ "serde",
+ "serde_json",
+ "tar",
+ "tempfile",
+ "toml",
+ "ureq",
+ "zip",
 ]
 
 [[package]]

@@ -9,4 +9,5 @@ mod constants;
 pub mod context;
 pub mod discovery;
 pub mod engine;
+pub mod fetcher;
 pub mod validation;

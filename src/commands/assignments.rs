@@ -8,10 +8,10 @@ use std::fs;
 use std::path::Path;
 
 use crate::config::get_config;
-use crate::core::file_operations::FileOperations;
+use crate::core::files::FileOperations;
 use crate::core::template::{builder::TemplateBuilder, engine::TemplateReference};
 use crate::core::validation::Validator;
-use crate::ui::output::{OutputManager, Status};
+use crate::display::output::{OutputManager, Status};
 
 /// Create a new assignment using the template system
 pub fn create_assignment(course_id: &str, title: &str) -> Result<()> {
@@ -604,9 +604,9 @@ fn calculate_assignment_health_status(
         return 3; // Critical - no assignments
     }
 
-    if let Some(last_modified) = last_modified {
+    last_modified.map_or(3, |last_modified| {
         let now = std::time::SystemTime::now();
-        if let Ok(duration) = now.duration_since(last_modified) {
+        now.duration_since(last_modified).map_or(3, |duration| {
             let days = duration.as_secs() / (24 * 60 * 60);
             match days {
                 0..=3 => 0,  // Excellent
@@ -614,14 +614,10 @@ fn calculate_assignment_health_status(
                 8..=14 => 2, // Warning
                 _ => 3,      // Critical
             }
-        } else {
-            3 // Critical - time error
-        }
-    } else {
-        3 // Critical - no timestamp
-    }
+        })
+    })
 }
 
-fn health_status_to_priority(health: usize) -> usize {
+const fn health_status_to_priority(health: usize) -> usize {
     health // 0 = best, 3 = worst
 }

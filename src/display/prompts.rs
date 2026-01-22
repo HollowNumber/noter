@@ -7,6 +7,8 @@ use anyhow::Result;
 use colored::*;
 use std::io::{self, Write};
 
+use crate::config::PathConfig;
+
 pub struct PromptManager;
 
 #[allow(dead_code)]
@@ -348,6 +350,3 @@ impl NoterPrompts {
         Ok(sections)
     }
 }
-
-// Re-export the PathConfig from config module for convenience
-use crate::config::PathConfig;

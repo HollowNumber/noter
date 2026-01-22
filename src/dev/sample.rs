@@ -4,11 +4,15 @@
 //! course materials including lectures, assignments, and study materials.
 
 #[cfg(feature = "dev-tools")]
-use super::dev_data_generator::Course;
+use super::generator::Course;
 #[cfg(feature = "dev-tools")]
-use fake::{Fake, faker::lorem::en::*, faker::name::en::*};
+use fake::{
+    Fake,
+    faker::lorem::en::{Sentence, Word, Words},
+    faker::name::en::Name,
+};
 #[cfg(feature = "dev-tools")]
-use rand::{Rng, SeedableRng, prelude::IndexedRandom, rngs::StdRng, seq::SliceRandom};
+use rand::{Rng, SeedableRng, prelude::IndexedRandom, rngs::StdRng};
 
 /// Template generator for course information files
 /// Template generator for lecture notes
@@ -27,13 +31,13 @@ impl LectureTemplate {
 
         // Generate dynamic content
         let overview = Self::generate_overview(topic, &mut rng);
-        let concepts = Self::generate_concepts(topic, &mut rng);
+        let concepts = Self::generate_concepts(&mut rng);
         let examples = Self::generate_examples(course, topic, &mut rng);
         let problems = Self::generate_problems(topic, &mut rng);
         let references = Self::generate_references(lecture_num, &mut rng);
 
         format!(
-            r#"= Lecture {}: {} 
+            r#"= Lecture {}: {}
 *Course*: {} - {} \
 *Date*: {} \
 *Topic*: {}
@@ -111,7 +115,7 @@ impl LectureTemplate {
         )
     }
 
-    fn generate_concepts(topic: &str, rng: &mut impl Rng) -> ConceptContent {
+    fn generate_concepts(rng: &mut impl Rng) -> ConceptContent {
         let concept_types = [
             (
                 "definition and mathematical foundations",
@@ -163,13 +167,13 @@ impl LectureTemplate {
             ),
             secondary_topics: selected_secondary
                 .iter()
-                .map(|topic| format!("- {}", topic))
+                .map(|topic| format!("- {topic}"))
                 .collect::<Vec<_>>()
                 .join("\n"),
         }
     }
 
-    fn generate_examples(course: &Course, topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_examples(_course: &Course, topic: &str, rng: &mut impl Rng) -> String {
         let languages = ["python", "rust", "java", "javascript", "cpp"];
         let lang = languages[rng.random_range(0..languages.len())];
 
@@ -200,7 +204,7 @@ impl LectureTemplate {
 def {}():
     """
     {}
-    
+
     Returns:
         Processed result demonstrating {} concepts
     """
@@ -304,12 +308,14 @@ def performance_benchmark():
             "Google Developer Documentation",
         ];
 
+        let author_email = format!("{}@dtu.dk", Word().fake::<String>().to_lowercase());
+
         format!(
             "- Course textbook, Chapter {}\n- {}\n- {}\n- Supplementary reading: {}",
             lecture_num % 15 + 1,
             textbooks[rng.random_range(0..textbooks.len())],
             online_resources[rng.random_range(0..online_resources.len())],
-            format!("{}@dtu.dk", Word().fake::<String>().to_lowercase())
+            author_email
         )
     }
 }
@@ -463,7 +469,7 @@ Implement a {} that efficiently processes {}. Your solution should handle edge c
 
 === Requirements:
 - Clean, well-commented code following best practices
-- Comprehensive error handling and input validation  
+- Comprehensive error handling and input validation
 - Unit tests covering normal and edge cases
 - Performance analysis with Big-O notation
 
@@ -641,7 +647,7 @@ Propose a novel solution or improvement:
         )
     }
 
-    fn generate_generic_problems(rng: &mut impl Rng) -> String {
+    fn generate_generic_problems(_rng: &mut impl Rng) -> String {
         format!(
             r#"== Problem 1: Core Concepts (35 points)
 Demonstrate your understanding of the fundamental concepts by:
@@ -1070,7 +1076,7 @@ By the end of this study session, you should be able to:
     }
 
     // Helper methods for content generation
-    fn generate_key_points(topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_key_points(_topic: &str, rng: &mut impl Rng) -> String {
         (1..=rng.random_range(4..7))
             .map(|i| {
                 format!(
@@ -1097,7 +1103,7 @@ By the end of this study session, you should be able to:
             .join("\n")
     }
 
-    fn generate_examples(topic: &str, rng: &mut impl Rng) -> String {
+    fn generate_examples(_topic: &str, rng: &mut impl Rng) -> String {
         let example_types = [
             "Real-world application",
             "Code example",
@@ -1339,7 +1345,7 @@ By the end of this study session, you should be able to:
             .join("\n\n")
     }
 
-    fn generate_challenge_problems(rng: &mut impl Rng) -> String {
+    fn generate_challenge_problems(_rng: &mut impl Rng) -> String {
         (1..=2)
             .map(|i| {
                 format!(

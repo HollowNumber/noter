@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+### Fixed
+
+- Doc tests not working
+- Fixed some `clippy` warnings
+
+### Changed 
+
+- Separated Config files into their own files
+- Renamed binary and references to noter.
+- Removed emojis from pr template
+- Made `clippy` warnings not deny ci
+- Made `ci.yml` not run builds on every push 
+
+#### Breaking changes
+
+- `config.json` now lives inside of `.config/noter/config.json` or similar on other systems.
+
+
 ## [0.6.1] - 2025-11-06
 
 ### Added
@@ -428,4 +448,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-For more detailed information about specific changes, see the [commit history](https://github.com/HollowNumber/dtu-notes/commits/main) on GitHub.
+For more detailed information about specific changes, see the [commit history](https://github.com/HollowNumber/noter/commits/main) on GitHub.

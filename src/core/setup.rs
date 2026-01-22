@@ -8,8 +8,8 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::config::Config;
-use crate::core::file_operations::FileOperations;
-use crate::core::github_template_fetcher::GitHubTemplateFetcher;
+use crate::core::files::FileOperations;
+use crate::core::template::fetcher::Fetcher;
 
 #[derive(Debug, Clone)]
 pub struct SetupConfig {
@@ -215,8 +215,7 @@ impl SetupManager {
                 .warnings
                 .push("No local templates found, downloading latest from GitHub...".to_string());
 
-            let download_results =
-                GitHubTemplateFetcher::download_and_install_templates(config, false)?;
+            let download_results = Fetcher::download_and_install_templates(config, false)?;
 
             for download_result in download_results {
                 let template_name = if download_result
