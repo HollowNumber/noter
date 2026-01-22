@@ -1,6 +1,6 @@
 # Noter CLI
 
-[![Rust](https://img.shields.io/badge/rust-1.85.0%2B-brightgreen.svg)](https://www.rust-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)](https://github.com/HollowNumber/dtu-notes/releases)
+[![Rust](https://img.shields.io/badge/rust-1.85.0%2B-brightgreen.svg)](https://www.rust-lang.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)](https://github.com/HollowNumber/noter/releases/latest)
 
 A comprehensive command-line tool for managing lecture notes and assignments at the Technical University of Denmark (DTU). Built with Rust for performance and reliability, designed to work seamlessly with Typst, Obsidian, and DTU-branded templates.
 
