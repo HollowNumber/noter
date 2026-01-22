@@ -6,15 +6,15 @@ Brief description of the changes in this PR.
 
 <!-- Mark the relevant option with an [x] -->
 
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📚 Documentation update
-- [ ] 🔧 Code refactoring (no functional changes, no API changes)
-- [ ] ⚡ Performance improvement
-- [ ] 🎨 Code style/formatting changes
-- [ ] 🧪 Test improvements
-- [ ] 📦 Dependency updates
+- [ ]  Bug fix (non-breaking change which fixes an issue)
+- [ ]  New feature (non-breaking change which adds functionality)
+- [ ]  Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ]  Documentation update
+- [ ]  Code refactoring (no functional changes, no API changes)
+- [ ]  Performance improvement
+- [ ]  Code style/formatting changes
+- [ ]  Test improvements
+- [ ]  Dependency updates
 
 ## Changes Made
 

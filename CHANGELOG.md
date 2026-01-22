@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Separated Config files into their own files
 - Renamed binary and references to noter.
+- Removed emojis from pr template
 
 
 ## [0.6.1] - 2025-11-06
