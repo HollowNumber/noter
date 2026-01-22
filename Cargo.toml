@@ -34,7 +34,7 @@ opener = "0.8.3"
 ureq = { version = "3.0.12", features = ["json"] }
 flate2 = "1.0.0"
 tar = "0.4.0"
-zip = "4.3.0"
+zip = "7.2.0"
 toml = "0.9.5"
 semver = "1.0.26"
 regex = "1.11.1"
