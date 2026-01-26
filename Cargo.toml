@@ -35,7 +35,7 @@ ureq = { version = "3.1.4", features = ["json"] }
 flate2 = "1.1.5"
 tar = "0.4.0"
 zip = "7.2.0"
-toml = "0.9.5"
+toml = "0.9.11"
 semver = "1.0.27"
 regex = "1.12.2"
 humansize = "2.1.3"
