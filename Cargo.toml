@@ -30,7 +30,7 @@ anyhow = "1.0.100"
 dirs = "6.0.0"
 colored = "3.0.0"
 serde = { version = "1.0.228", features = ["derive"] }
-opener = "0.8.3"
+opener = "0.8.4"
 ureq = { version = "3.1.4", features = ["json"] }
 flate2 = "1.1.5"
 tar = "0.4.0"
