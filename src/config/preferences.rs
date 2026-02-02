@@ -3,6 +3,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(default)]
 pub struct NotePreferences {
+    /// Default sections for lecture notes
+    pub lecture_sections: Vec<String>,
+
+    /// Default sections for assignments
+    pub assignment_sections: Vec<String>,
+
     /// Whether to automatically open files after creation
     pub auto_open_file: bool,
 
@@ -11,12 +17,6 @@ pub struct NotePreferences {
 
     /// Include date in lecture note titles
     pub include_date_in_title: bool,
-
-    /// Default sections for lecture notes
-    pub lecture_sections: Vec<String>,
-
-    /// Default sections for assignments
-    pub assignment_sections: Vec<String>,
 
     /// Whether to create backup of existing files
     pub create_backups: bool,

@@ -13,13 +13,13 @@ pub struct CourseManager<'a> {
 
 #[allow(dead_code)]
 impl<'a> CourseManager<'a> {
-    pub fn new(config: &'a mut Config) -> Self {
+    pub const fn new(config: &'a mut Config) -> Self {
         Self { config }
     }
 
     pub fn add_course(&mut self, course_id: &str, course_name: &str) -> Result<()> {
         if self.config.courses.contains_key(course_id) {
-            return Err(anyhow::anyhow!("Course {} already exists", course_id));
+            return Err(anyhow::anyhow!("Course {course_id} already exists"));
         }
 
         self.config
@@ -33,14 +33,16 @@ impl<'a> CourseManager<'a> {
             self.config.remove_course(course_id)?;
             Ok(course_name)
         } else {
-            Err(anyhow::anyhow!("Course {} not found", course_id))
+            Err(anyhow::anyhow!("Course {course_id} not found"))
         }
     }
 
+    #[must_use]
     pub fn list_courses(&self) -> Vec<(String, String)> {
         self.config.list_courses()
     }
 
+    #[must_use]
     pub fn get_course_name(&self, course_id: &str) -> Option<String> {
         self.config.courses.get(course_id).cloned()
     }

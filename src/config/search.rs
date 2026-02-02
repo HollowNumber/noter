@@ -3,6 +3,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(default)]
 pub struct SearchConfig {
+    /// File extensions to search in
+    pub file_extensions: Vec<String>,
+
     /// Maximum number of search results to show
     pub max_results: usize,
 
@@ -11,9 +14,6 @@ pub struct SearchConfig {
 
     /// Case sensitive search
     pub case_sensitive: bool,
-
-    /// File extensions to search in
-    pub file_extensions: Vec<String>,
 }
 
 impl Default for SearchConfig {

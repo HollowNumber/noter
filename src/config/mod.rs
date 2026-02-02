@@ -32,6 +32,30 @@ pub use typst::TypstConfig;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(default)]
 pub struct Config {
+    /// Obsidian integration settings
+    pub obsidian_integration: ObsidianIntegrationConfig,
+
+    /// Paths configuration
+    pub paths: PathConfig,
+
+    /// Metadata (Not used by user)
+    pub metadata: Metadata,
+
+    /// Typst compilation settings
+    pub typst: TypstConfig,
+
+    /// Default note structure preferences
+    pub note_preferences: NotePreferences,
+
+    /// Template source configuration
+    pub templates: UserTemplateConfig,
+
+    /// Search preferences
+    pub search: SearchConfig,
+
+    /// User's DTU courses
+    pub courses: HashMap<String, String>,
+
     /// User's name for templates
     pub author: String,
 
@@ -43,30 +67,6 @@ pub struct Config {
 
     /// Semester format preference
     pub semester_format: SemesterFormat,
-
-    /// Default note structure preferences
-    pub note_preferences: NotePreferences,
-
-    /// Paths configuration
-    pub paths: PathConfig,
-
-    /// Template source configuration
-    pub templates: UserTemplateConfig,
-
-    /// Typst compilation settings
-    pub typst: TypstConfig,
-
-    /// Search preferences
-    pub search: SearchConfig,
-
-    /// User's DTU courses
-    pub courses: HashMap<String, String>,
-
-    /// Obsidian integration settings
-    pub obsidian_integration: ObsidianIntegrationConfig,
-
-    /// Metadata (Not used by user)
-    pub metadata: Metadata,
 }
 
 impl Default for Config {

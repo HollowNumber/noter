@@ -9,9 +9,9 @@ pub struct TypstConfig {
     /// Watch mode arguments
     pub watch_args: Vec<String>,
 
-    /// Whether to clean PDFs before compiling
-    pub clean_before_compile: bool,
-
     /// Output directory for PDFs (relative to source)
     pub output_dir: Option<String>,
+
+    /// Whether to clean PDFs before compiling
+    pub clean_before_compile: bool,
 }
