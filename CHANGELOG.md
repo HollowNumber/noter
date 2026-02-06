@@ -15,6 +15,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.7.1] - 2026-02-06
+
+### Added
+
+- Explicit datetime constructor in generated templates for accurate date preservation
+  - Notes now use `datetime(year: 2026, month: 2, day: 6)` instead of `datetime.today()`
+  - Preserves exact creation date even when compiling weeks/months later
+  - Important for academic record-keeping and reviewing past semester notes
+
+### Fixed
+
+- Fixed "Directory not empty" error when downloading template updates multiple times
+  - Refactored template extraction logic with proper helper functions
+  - Correctly handles nested archive structure with version folders
+  - Preserves multiple template versions side-by-side (e.g., 0.6.0/, 0.6.2/)
+  - Works for both official and custom templates
+  - Handles cross-filesystem moves by falling back to copy operation
+
+### Changed
+
+- deps: bump clap from 4.5.54 to 4.5.56
+- deps: bump chrono from 0.4.42 to 0.4.43
+- deps: bump toml from 0.9.5 to 0.9.11+spec-1.1.0
+- deps: bump colored from 3.0.0 to 3.1.1
+- deps: bump opener from 0.8.3 to 0.8.4
+- deps: bump zip from 6.0.0 to 7.2.0
+
+
 ## [0.7.0] - 2026-01-22
 
 
