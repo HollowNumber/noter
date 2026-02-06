@@ -259,114 +259,156 @@ impl Fetcher {
         _version: &str,
         repo_config: &TemplateRepository,
     ) -> Result<()> {
-        // For official template, extract directly to dtu-template directory
+        let target_dir = Path::new(typst_packages_dir);
+        fs::create_dir_all(target_dir)?;
+
+        // Check if the archive is a zip or tar.gz file
+        let archive_name = archive_path
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("");
+
+        let temp_dir = target_dir.join("temp_extract");
+
+        if archive_name.ends_with(".zip") {
+            Self::extract_zip_to_temp(archive_path, &temp_dir)?;
+        } else {
+            Self::extract_targz_to_temp(archive_path, &temp_dir)?;
+        }
+
+        // Install from temp directory to final location
         let is_official_template = repo_config.repository == "HollowNumber/dtu-note-template"
             || repo_config.name == "dtu_template";
 
-        if is_official_template {
-            // Extract directly to typst packages/local
-            let target_dir = Path::new(typst_packages_dir);
-            fs::create_dir_all(target_dir)?;
+        let final_dir = if is_official_template {
+            target_dir.join("dtu-template")
+        } else {
+            target_dir.join(&repo_config.name)
+        };
 
-            let dtu_template_dir = target_dir.join("dtu-template");
+        Self::install_template_versions(&temp_dir, &final_dir, &repo_config.name)?;
 
-            // Check if the archive is a zip or tar.gz file
-            let archive_name = archive_path
-                .file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("");
+        // Clean up temp directory
+        if temp_dir.exists() {
+            fs::remove_dir_all(&temp_dir)?;
+        }
 
-            if archive_name.ends_with(".zip") {
-                // Handle ZIP file using zip crate
-                use zip::ZipArchive;
+        Ok(())
+    }
 
-                let file = fs::File::open(archive_path)
-                    .context("Failed to open downloaded template file")?;
-                let mut archive = ZipArchive::new(file).context("Failed to read ZIP archive")?;
+    /// Extract ZIP archive to temporary directory
+    fn extract_zip_to_temp(archive_path: &Path, temp_dir: &Path) -> Result<()> {
+        use zip::ZipArchive;
 
-                // Extract with unwrapped root directory - this automatically handles
-                // archives that have a single root folder and extracts contents directly
-                archive
-                    .extract(&dtu_template_dir)
-                    .context("Failed to extract ZIP file")?;
-            } else {
-                // Handle TAR.GZ file (fallback)
-                use flate2::read::GzDecoder;
-                use tar::Archive;
+        if temp_dir.exists() {
+            fs::remove_dir_all(temp_dir)?;
+        }
+        fs::create_dir_all(temp_dir)?;
 
-                let file = fs::File::open(archive_path)
-                    .context("Failed to open downloaded template file")?;
-                let decoder = GzDecoder::new(file);
-                let mut archive = Archive::new(decoder);
+        let file =
+            fs::File::open(archive_path).context("Failed to open downloaded template file")?;
+        let mut archive = ZipArchive::new(file).context("Failed to read ZIP archive")?;
 
-                // Extract the archive directly to a temporary location
-                let temp_dir = target_dir.join("temp_extract");
-                if temp_dir.exists() {
-                    fs::remove_dir_all(&temp_dir)?;
-                }
-                fs::create_dir_all(&temp_dir)?;
+        archive
+            .extract(temp_dir)
+            .context("Failed to extract ZIP file")?;
 
-                archive.unpack(&temp_dir)?;
+        Ok(())
+    }
 
-                // Look for the extracted directory and move it to "dtu-template"
-                let extracted_dirs: Vec<_> = fs::read_dir(&temp_dir)?
-                    .filter_map(|entry| entry.ok())
-                    .filter(|entry| {
-                        entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false)
-                            && (entry
-                                .file_name()
-                                .to_string_lossy()
-                                .starts_with("dtu-note-template-")
-                                || entry
-                                    .file_name()
-                                    .to_string_lossy()
-                                    .starts_with("dtu-template"))
-                    })
-                    .collect();
+    /// Extract TAR.GZ archive to temporary directory
+    fn extract_targz_to_temp(archive_path: &Path, temp_dir: &Path) -> Result<()> {
+        use flate2::read::GzDecoder;
+        use tar::Archive;
 
-                if let Some(extracted_dir) = extracted_dirs.first() {
-                    fs::rename(extracted_dir.path(), &dtu_template_dir)?;
-                }
+        if temp_dir.exists() {
+            fs::remove_dir_all(temp_dir)?;
+        }
+        fs::create_dir_all(temp_dir)?;
 
-                // Clean up temp directory
-                if temp_dir.exists() {
-                    fs::remove_dir_all(&temp_dir)?;
+        let file =
+            fs::File::open(archive_path).context("Failed to open downloaded template file")?;
+        let decoder = GzDecoder::new(file);
+        let mut archive = Archive::new(decoder);
+
+        archive.unpack(temp_dir)?;
+
+        Ok(())
+    }
+
+    /// Install template versions from temp directory to final location
+    ///
+    /// This handles extracting version folders from the archive wrapper and installing
+    /// them into the target directory, preserving multiple versions.
+    fn install_template_versions(
+        temp_dir: &Path,
+        target_dir: &Path,
+        template_name: &str,
+    ) -> Result<()> {
+        use crate::core::files::FileOperations;
+
+        // Ensure target directory exists
+        fs::create_dir_all(target_dir)?;
+
+        // Find the wrapper directory (e.g., dtu-note-template-abc123/)
+        let wrapper_dirs: Vec<_> = fs::read_dir(temp_dir)?
+            .filter_map(|entry| entry.ok())
+            .filter(|entry| entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false))
+            .collect();
+
+        if wrapper_dirs.is_empty() {
+            return Err(anyhow::anyhow!("No directories found in extracted archive"));
+        }
+
+        let wrapper_dir = wrapper_dirs.first().unwrap();
+
+        // Look for nested template directory inside wrapper
+        // The structure is: wrapper_dir/{template_name}/{version}/
+        let nested_template_dir = wrapper_dir.path().join(template_name);
+
+        if nested_template_dir.exists() && nested_template_dir.is_dir() {
+            // Extract version folders from nested directory
+            for entry in fs::read_dir(&nested_template_dir)? {
+                let entry = entry?;
+                let source_path = entry.path();
+
+                if source_path.is_dir() {
+                    let version_name = entry.file_name();
+                    let dest_path = target_dir.join(&version_name);
+
+                    // Remove existing version if it exists (for force updates)
+                    if dest_path.exists() {
+                        fs::remove_dir_all(&dest_path)?;
+                    }
+
+                    // Try to move the version folder (fast)
+                    // If that fails (cross-filesystem), copy instead
+                    if fs::rename(&source_path, &dest_path).is_err() {
+                        FileOperations::copy_dir_recursive(&source_path, &dest_path)?;
+                    }
                 }
             }
         } else {
-            // For custom templates, extract to the template name directory
-            let target_dir = Path::new(typst_packages_dir).join(&repo_config.name);
-            if target_dir.exists() {
-                fs::remove_dir_all(&target_dir)?;
-            }
-            fs::create_dir_all(&target_dir)?;
+            // Fallback: wrapper directory structure doesn't match expected format
+            // This handles cases where the archive has a different structure
+            // Copy all contents from wrapper directly to target
+            for entry in fs::read_dir(wrapper_dir.path())? {
+                let entry = entry?;
+                let source_path = entry.path();
+                let dest_path = target_dir.join(entry.file_name());
 
-            // Handle both zip and tar.gz
-            let archive_name = archive_path
-                .file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("");
-
-            if archive_name.ends_with(".zip") {
-                use zip::ZipArchive;
-
-                let file = fs::File::open(archive_path)
-                    .context("Failed to open downloaded template file")?;
-                let mut archive = ZipArchive::new(file).context("Failed to read ZIP archive")?;
-
-                // Extract with unwrapped root directory
-                archive
-                    .extract(&target_dir)
-                    .context("Failed to extract ZIP file")?;
-            } else {
-                use flate2::read::GzDecoder;
-                use tar::Archive;
-
-                let file = fs::File::open(archive_path)
-                    .context("Failed to open downloaded template file")?;
-                let decoder = GzDecoder::new(file);
-                let mut archive = Archive::new(decoder);
-                archive.unpack(&target_dir)?;
+                if source_path.is_dir() {
+                    // Remove existing directory if it exists
+                    if dest_path.exists() {
+                        fs::remove_dir_all(&dest_path)?;
+                    }
+                    // Try rename first, fallback to copy
+                    if fs::rename(&source_path, &dest_path).is_err() {
+                        FileOperations::copy_dir_recursive(&source_path, &dest_path)?;
+                    }
+                } else if source_path.is_file() {
+                    fs::copy(&source_path, &dest_path)?;
+                }
             }
         }
 
@@ -571,10 +613,9 @@ mod tests {
     #[test]
     fn test_cache_path_generation() {
         let path = Fetcher::get_cache_path("test-template", "v1.0.0").unwrap();
-        assert!(
-            path.to_string_lossy()
-                .contains("test-template-v1.0.0.tar.gz")
-        );
+        assert!(path
+            .to_string_lossy()
+            .contains("test-template-v1.0.0.tar.gz"));
     }
 
     #[test]
