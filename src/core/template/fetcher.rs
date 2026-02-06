@@ -613,9 +613,10 @@ mod tests {
     #[test]
     fn test_cache_path_generation() {
         let path = Fetcher::get_cache_path("test-template", "v1.0.0").unwrap();
-        assert!(path
-            .to_string_lossy()
-            .contains("test-template-v1.0.0.tar.gz"));
+        assert!(
+            path.to_string_lossy()
+                .contains("test-template-v1.0.0.tar.gz")
+        );
     }
 
     #[test]
