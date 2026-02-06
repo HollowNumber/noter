@@ -8,6 +8,7 @@ use super::context::TemplateContext;
 use super::discovery::TemplateDiscovery;
 use crate::config::Config;
 use anyhow::{Result, anyhow};
+use chrono::{Datelike, Local};
 
 pub struct TemplateEngine;
 
@@ -111,12 +112,21 @@ impl TemplateEngine {
             &template_def.function
         };
 
+        // Generate explicit datetime constructor for consistent date preservation
+        let now = Local::now();
+        let date_str = format!(
+            "date: datetime(year: {}, month: {}, day: {})",
+            now.year(),
+            now.month(),
+            now.day()
+        );
+
         // Build the standard parameters that all templates expect
         let params = [
             format!("course: \"{}\"", context.course_id),
             format!("course-name: \"{}\"", context.course_name),
             format!("title: \"{}\"", context.title),
-            "date: datetime.today()".to_string(),
+            date_str,
             format!("author: \"{}\"", context.author),
             format!("semester: \"{}\"", context.semester),
         ];
