@@ -23,7 +23,7 @@ name = "noter"
 path = "src/main.rs"
 
 [dependencies]
-clap = {version = "4.5.56", features = ["derive"]}
+clap = {version = "4.5.57", features = ["derive"]}
 chrono = {version = "0.4.43", features = ["serde"]}
 serde_json = "1.0.145"
 anyhow = "1.0.100"
