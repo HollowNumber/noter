@@ -1,6 +1,6 @@
 [package]
 name = "noter"
-version = "0.7.0"
+version = "0.7.1"
 edition = "2024"
 description = "DTU note-taking CLI with Typst and Obsidian integration"
 authors = ["Mikkel M.H Pedersen"]
