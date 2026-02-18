@@ -12,6 +12,8 @@ use std::path::{Path, PathBuf};
 
 pub struct FileOperations;
 
+const SHELL_BASED_EDITORS: [&str; 5] = ["nvim", "vim", "nano", "helix", "emacs"];
+
 #[allow(dead_code)]
 impl FileOperations {
     /// Open a file with the configured editor or system default
@@ -43,18 +45,22 @@ impl FileOperations {
     }
 
     fn try_command(editor: &str, path: &Path) -> Result<()> {
-        std::process::Command::new(editor)
-            .arg(path)
-            .stdin(std::process::Stdio::null())
-            .stdout(std::process::Stdio::null())
-            .stderr(std::process::Stdio::null())
-            .spawn()
-            .context(format!("Failed to spawn editor: {}", editor))?;
+        let mut binding = std::process::Command::new(editor);
+        let cmd: &mut std::process::Command = binding.arg(path);
+        if !SHELL_BASED_EDITORS.contains(&editor) {
+            cmd.stdin(std::process::Stdio::null())
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null());
+        }
+
+        cmd.spawn()
+            .context(format!("Failed to spawn editor {editor}"))?
+            .wait()
+            .context(format!("Editor returned non-zero status"))?;
 
         println!("{} Opened with {}", "✅".green(), editor);
         Ok(())
     }
-    //TOOD: Deduplicate code
 
     /// Opens a given filepath's parent directory
     fn open_file_directory(filepath: &Path, config: &Config) -> Result<()> {
@@ -122,9 +128,15 @@ impl FileOperations {
     ) -> Result<bool> {
         Self::create_file_with_content(filepath, content, config)?;
 
-        if auto_open && config.note_preferences.auto_open_file {
+        if !auto_open {
+            return Ok(!filepath.exists());
+        }
+
+        if config.note_preferences.auto_open_file {
             Self::open_file(filepath, config)?;
-        } else if auto_open && config.note_preferences.auto_open_dir {
+        }
+
+        if config.note_preferences.auto_open_dir {
             Self::open_file_directory(filepath, config)?;
         }
 
@@ -138,17 +150,15 @@ impl FileOperations {
             fs::create_dir_all(parent)?;
         }
 
-        // Handle existing file
-        if filepath.exists() {
-            if config.note_preferences.create_backups {
-                Self::create_backup(filepath)?;
-            } else {
-                anyhow::bail!("File already exists: {}", filepath.to_string_lossy());
-            }
+        if !filepath.exists() {
+            fs::write(filepath, content)?;
+        } else {
+            anyhow::bail!("File already exists: {}", filepath.to_string_lossy());
         }
 
-        // Write the file
-        fs::write(filepath, content)?;
+        if config.note_preferences.create_backups {
+            Self::create_backup(filepath)?;
+        }
         Ok(())
     }
 
