@@ -47,6 +47,7 @@ impl FileOperations {
     fn try_command(editor: &str, path: &Path) -> Result<()> {
         let mut binding = std::process::Command::new(editor);
         let cmd: &mut std::process::Command = binding.arg(path);
+
         if !SHELL_BASED_EDITORS.contains(&editor) {
             cmd.stdin(std::process::Stdio::null())
                 .stdout(std::process::Stdio::null())
