@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - noter auto opening editors not working for shell based editors.
-
+- `noter template update` now correctly updates the template version in config file.
 
 
 
