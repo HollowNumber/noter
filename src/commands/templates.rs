@@ -2,7 +2,7 @@
 //!
 //! Handles template status, updates, and custom template creation using the new template engine system.
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use colored::Colorize;
 use std::fs;
 use std::path::Path;
@@ -245,7 +245,7 @@ fn display_command_examples() {
 
 /// Update templates to the latest version
 pub fn update_template() -> Result<()> {
-    let config = get_config()?;
+    let mut config = get_config()?;
 
     OutputManager::print_status(Status::Loading, "Checking for template updates...");
 
@@ -266,8 +266,19 @@ pub fn update_template() -> Result<()> {
         return Ok(());
     }
 
+    let mut newest: semver::Version = semver::Version::parse(&config.template_version)
+        .context(format!("Failed to parse template version in config!"))?;
+
     // We dont check if the user already has a version installed.
     for result in results {
+        let version = semver::Version::parse(&result.version[1..]).context(format!(
+            "Failed to get semver version from downloaded template"
+        ))?;
+
+        if newest < version {
+            newest = version;
+        }
+
         OutputManager::print_status(
             Status::Success,
             &format!(
@@ -281,6 +292,8 @@ pub fn update_template() -> Result<()> {
             ),
         );
     }
+
+    config.template_version = newest.to_string();
 
     // Verify the update worked by checking template discovery
     println!();
@@ -303,6 +316,8 @@ pub fn update_template() -> Result<()> {
             );
         }
     }
+
+    config.save().context("Failed to save config!")?;
 
     Ok(())
 }
