@@ -266,6 +266,7 @@ pub fn update_template() -> Result<()> {
         return Ok(());
     }
 
+    // We dont check if the user already has a version installed.
     for result in results {
         OutputManager::print_status(
             Status::Success,
@@ -278,11 +279,6 @@ pub fn update_template() -> Result<()> {
                     .unwrap_or("template"),
                 result.version.green()
             ),
-        );
-
-        println!(
-            "  Installed at: {}",
-            result.installed_path.display().to_string().dimmed()
         );
     }
 
