@@ -267,13 +267,12 @@ pub fn update_template() -> Result<()> {
     }
 
     let mut newest: semver::Version = semver::Version::parse(&config.template_version)
-        .context(format!("Failed to parse template version in config!"))?;
+        .context("Failed to parse template version in config!".to_string())?;
 
     // We dont check if the user already has a version installed.
     for result in results {
-        let version = semver::Version::parse(&result.version[1..]).context(format!(
-            "Failed to get semver version from downloaded template"
-        ))?;
+        let version = semver::Version::parse(&result.version[1..])
+            .context("Failed to get semver version from downloaded template".to_string())?;
 
         if newest < version {
             newest = version;

@@ -39,24 +39,14 @@ mod dev;
 mod display;
 
 use anyhow::Result;
-use clap::Parser;
+use clap::{CommandFactory, Parser};
+use clap_complete::CompleteEnv;
 use noter::{AssignmentAction, Commands, ConfigAction, CourseAction, SetupAction, TemplateAction};
 
 #[cfg(feature = "dev-tools")]
 use noter::DevAction;
 
-/// Command-line interface structure using clap derive macros.
-///
-/// This structure defines the main CLI application with global configuration
-/// and routing to subcommands.
-#[derive(Parser)]
-#[command(name = "noter")]
-#[command(about = "DTU note-taking CLI with official branding")]
-#[command(version = env!("CARGO_PKG_VERSION"))]
-struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-}
+use noter::Cli;
 
 /// Main application entry point.
 ///
@@ -69,6 +59,8 @@ struct Cli {
 /// Returns `Ok(())` on successful execution, or an error with context
 /// if any command fails.
 fn main() -> Result<()> {
+    CompleteEnv::with_factory(Cli::command).complete();
+
     let cli = Cli::parse();
     commands::execute_command(&cli.command)?;
     Ok(())

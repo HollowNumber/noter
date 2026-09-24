@@ -195,7 +195,7 @@ impl StatusManager {
         }
 
         // Sort by health status and then by activity
-        course_health.sort_by(|a, b| a.days_since_last_activity.cmp(&b.days_since_last_activity));
+        course_health.sort_by_key(|a| a.days_since_last_activity);
 
         Ok(course_health)
     }

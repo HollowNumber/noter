@@ -2,7 +2,10 @@
 //!
 //! Thin command layer that delegates to core setup manager.
 
-use anyhow::Result;
+use std::fs;
+use std::path::{Path, PathBuf};
+
+use anyhow::{Context, Result, anyhow, bail};
 use colored::Colorize;
 
 use crate::config::get_config;
@@ -308,4 +311,66 @@ pub fn show_setup_status() -> Result<()> {
     }
 
     Ok(())
+}
+
+use clap_complete::env::{Bash, EnvCompleter, Fish, Zsh};
+
+const BIN: &str = "noter";
+const ENV_VAR: &str = "COMPLETE";
+
+/// Install the dynamic completion registration script for the user's shell.
+///
+/// The script only calls back into `noter` on tab, so it never needs
+/// regenerating when commands or completers change.
+pub(crate) fn completions(shell: Option<&str>) -> Result<()> {
+    let shell = match shell {
+        Some(s) => s.to_owned(),
+        None => detect_shell()?,
+    };
+
+    let config_dir = dirs::config_dir().context("Could not determine config directory")?;
+    let data_dir = dirs::data_dir().context("Could not determine data directory")?;
+
+    let (completer, path, needs_source): (&dyn EnvCompleter, PathBuf, bool) = match shell.as_str() {
+        "fish" => (&Fish, config_dir.join("fish/completions/noter.fish"), false),
+        "bash" => (
+            &Bash,
+            data_dir.join("bash-completion/completions/noter"),
+            false,
+        ),
+        "zsh" => (&Zsh, data_dir.join("noter/completions.zsh"), true),
+        other => bail!("Unsupported shell '{other}' (supported: fish, bash, zsh)"),
+    };
+
+    let mut script = Vec::new();
+    completer
+        .write_registration(ENV_VAR, BIN, BIN, BIN, &mut script)
+        .context("Failed to generate completion script")?;
+
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)
+            .with_context(|| format!("Failed to create {}", parent.display()))?;
+    }
+    fs::write(&path, script).with_context(|| format!("Failed to write {}", path.display()))?;
+
+    println!("Installed {shell} completions to {}", path.display());
+    if needs_source {
+        println!(
+            "Add this line to your ~/.zshrc:\n  source {}",
+            path.display()
+        );
+    }
+
+    Ok(())
+}
+
+fn detect_shell() -> Result<String> {
+    let shell = std::env::var("SHELL")
+        .context("Could not detect shell from $SHELL; pass the shell explicitly")?;
+
+    Path::new(&shell)
+        .file_name()
+        .and_then(|n| n.to_str())
+        .map(str::to_owned)
+        .ok_or_else(|| anyhow!("Could not parse shell from $SHELL: {shell}"))
 }
