@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.2]
+
 ### Changed
 
 - Removed outdated status message in `noter template update` command
+- Added `noter setup completions` which installs completions. 
 
 
 ### Fixed
