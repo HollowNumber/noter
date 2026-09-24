@@ -94,22 +94,22 @@ test-config:
 
 # Development helpers
 dev-all: fmt lint test build
-    @echo "✅ All development checks passed!"
+    @echo "All development checks passed!"
 
 # Release workflow
 release: check build-release profile
-    @echo "🚀 Release build complete!"
+    @echo "Release build complete!"
     @echo "Binary location: {{release_dir}}/{{binary_name}}.exe"
 
 # Quick development cycle
 dev: build test
-    @echo "🔄 Quick development cycle complete!"
+    @echo "Quick development cycle complete!"
 
 # Setup development environment
 setup-dev:
     cargo install cargo-watch
     cargo install cargo-edit
-    @echo "📦 Development environment setup complete!"
+    @echo "Development environment setup complete!"
 
 # Generate coverage report (requires cargo-tarpaulin)
 coverage:
