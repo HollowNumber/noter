@@ -75,6 +75,19 @@ impl Config {
         Ok(config)
     }
 
+    pub fn load_readonly() -> Result<Self> {
+        let config_path = Self::config_file_path()?;
+        let content = fs::read_to_string(&config_path)?;
+
+        let mut config: Config = serde_json::from_str(&content)?;
+        if Self::needs_migration(&config) {
+            config = Self::migrate(config)?;
+        }
+
+        config.paths.resolve_paths()?;
+        Ok(config)
+    }
+
     /// Save configuration to file
     pub fn save(&self) -> Result<()> {
         let config_path = Self::config_file_path()?;

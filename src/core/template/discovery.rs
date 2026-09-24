@@ -315,6 +315,14 @@ impl TemplateDiscovery {
         }
     }
 
+    pub fn get_all_variants(configs: &[TemplateConfig]) -> Vec<TemplateVariant> {
+        configs
+            .iter()
+            .flat_map(|c| c.variants.iter().flatten())
+            .cloned()
+            .collect()
+    }
+
     /// Get course type from any available course mapping in configs
     pub fn resolve_course_type(
         configs: &[TemplateConfig],

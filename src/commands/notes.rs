@@ -137,7 +137,7 @@ pub fn list_recent(course_id: &str) -> Result<()> {
     let mut files = DirectoryScanner::scan_directory_for_files(&course_dir, &["typ"])?;
 
     // Sort by modification time (most recent first)
-    files.sort_by(|a, b| b.modified.cmp(&a.modified));
+    files.sort_by_key(|b| std::cmp::Reverse(b.modified));
 
     if files.is_empty() {
         println!("  No notes found");

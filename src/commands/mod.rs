@@ -109,6 +109,7 @@ fn execute_setup_action(action: &SetupAction) -> Result<()> {
     match action {
         SetupAction::Status => setup::show_setup_status(),
         SetupAction::Clean => setup::clean_setup(),
+        SetupAction::Completions { shell } => setup::completions(shell.as_deref()),
     }
 }
 

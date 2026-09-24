@@ -85,6 +85,7 @@
 //! to prevent corruption during concurrent access.
 
 pub mod commands;
+pub mod completions;
 pub mod config;
 pub mod core;
 pub mod data;
@@ -92,7 +93,19 @@ pub mod data;
 pub mod dev;
 pub mod display;
 
-use clap::Subcommand;
+use clap::{ArgAction, Parser, Subcommand};
+/// Command-line interface structure using clap derive macros.
+///
+/// This structure defines the main CLI application with global configuration
+/// and routing to subcommands.
+#[derive(Parser)]
+#[command(name = "noter")]
+#[command(about = "DTU note-taking CLI with official branding")]
+#[command(version = env!("CARGO_PKG_VERSION"))]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
 
 #[derive(Subcommand)]
 pub enum Commands {
@@ -100,6 +113,7 @@ pub enum Commands {
     #[command(alias = "n")]
     Note {
         /// Course code (e.g., 02101)
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
 
         /// Custom title for the note (optional)
@@ -108,6 +122,7 @@ pub enum Commands {
 
         /// Template variant to use (e.g., math, programming)
         #[arg(short, long)]
+        #[arg(add = ArgValueCandidates::new(completions::variants))]
         variant: Option<String>,
 
         /// Custom sections (comma-separated)
@@ -122,6 +137,7 @@ pub enum Commands {
     #[command(alias = "a")]
     Assignment {
         /// Course code (e.g., 02101)
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
         /// Assignment title
         title: String,
@@ -130,6 +146,7 @@ pub enum Commands {
     #[command(alias = "c")]
     Compile {
         /// Path to the .typ file (with or without extension)
+        #[arg(add = ArgValueCompleter::new(completions::typst_files()))]
         filepath: String,
         /// Check compilation status before compiling
         #[arg(long)]
@@ -139,6 +156,7 @@ pub enum Commands {
     #[command(alias = "w")]
     Watch {
         /// Path to the .typ file (with or without extension)
+        #[arg(add = ArgValueCompleter::new(completions::typst_files()))]
         filepath: String,
     },
     /// Check compilation status of files
@@ -153,6 +171,7 @@ pub enum Commands {
     #[command(alias = "r")]
     Recent {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
     },
     /// Initialize repository structure
@@ -164,6 +183,7 @@ pub enum Commands {
     #[command(alias = "i")]
     Index {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
     },
     /// Search through notes
@@ -195,6 +215,7 @@ pub enum Commands {
     #[command(alias = "o")]
     Open {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
     },
 
@@ -230,6 +251,12 @@ pub enum SetupAction {
     Status,
     /// Clean/reset the entire setup
     Clean,
+
+    /// Adds completions to shell
+    Completions {
+        #[arg(value_parser = ["fish", "bash", "zsh"])]
+        shell: Option<String>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -237,6 +264,7 @@ pub enum AssignmentAction {
     /// List recent assignments for a course
     Recent {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
         /// Number of recent assignments to show
         #[arg(short, long, default_value = "5")]
@@ -245,6 +273,7 @@ pub enum AssignmentAction {
     /// Show assignment statistics for a course
     Stats {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
     },
     /// List all assignments across courses with activity summary
@@ -252,6 +281,7 @@ pub enum AssignmentAction {
     /// Show assignment health and activity analysis
     Health {
         /// Course code (optional - shows all courses if omitted)
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: Option<String>,
     },
 }
@@ -270,6 +300,7 @@ pub enum CourseAction {
     /// Remove a course
     Remove {
         /// Course code to remove
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
     },
     /// Show common DTU course codes
@@ -332,6 +363,7 @@ pub enum ConfigAction {
         /// Repository name
         name: String,
         /// Whether to enable (true) or disable (false)
+        #[arg(action = ArgAction::Set)]
         enabled: bool,
     },
     /// List all template repositories
@@ -339,6 +371,7 @@ pub enum ConfigAction {
     /// Enable/disable template auto-update
     SetTemplateAutoUpdate {
         /// Enable auto-update
+        #[arg(action = ArgAction::Set)]
         enabled: bool,
     },
     /// Reset configuration to defaults
@@ -369,6 +402,7 @@ pub enum TemplateAction {
     /// Create a custom template file
     Create {
         /// Course code
+        #[arg(add = ArgValueCandidates::new(completions::course_ids))]
         course_id: String,
         /// Template title
         title: String,
@@ -402,6 +436,7 @@ pub enum DevAction {
     Clean,
 }
 
+use clap_complete::{ArgValueCandidates, ArgValueCompleter};
 // Re-export commonly used types for easier access
 pub use config::{Config, get_config};
 pub use core::status::{HealthStatus, StatusManager};

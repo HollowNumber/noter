@@ -55,9 +55,9 @@ impl FileOperations {
         }
 
         cmd.spawn()
-            .context(format!("Failed to spawn editor {editor}"))?
+            .context("Failed to spawn editor {editor}".to_string())?
             .wait()
-            .context(format!("Editor returned non-zero status"))?;
+            .context("Editor returned non-zero status".to_string())?;
 
         println!("{} Opened with {}", "✅".green(), editor);
         Ok(())
